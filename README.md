@@ -4,7 +4,7 @@ A small, in-progress personal-finance app. Built with React 19, TypeScript, and 
 
 ## Status
 
-Early. The app now boots into a real UI shell (layout, navigation, routing) with a landing page at `/` and a "Coming soon" stub at `/app`. No feature pages yet. The pure-TypeScript domain layer under `src/domain/` is in place for those features to build on.
+Early. The app boots into a real UI shell (layout, navigation, routing) with a landing page at `/` and a wallet list view at `/wallet`. The `/wallet` page shows an empty state with a "Create demo wallet" button until a wallet exists, then lists accounts with per-account balances and per-currency totals. The pure-TypeScript domain layer under `src/domain/` backs the feature.
 
 ## Scripts
 
@@ -19,11 +19,12 @@ No test runner is wired up yet.
 
 ```
 src/
-  app/      # UI shell: router, Layout, Navigation (presentational, domain-free)
-  pages/    # route components: Landing, NotFound
-  domain/   # pure TS: wallets, accounts, transactions, money, reducer, selectors
-  main.tsx  # mounts <RouterProvider>
-openspec/   # spec-driven change workflow (proposals, specs, tasks)
+  app/       # UI shell: router, Layout, Navigation (presentational, domain-free)
+  pages/     # route components: Landing, NotFound
+  features/  # bridges between shell and domain (e.g. wallet: store, WalletView)
+  domain/    # pure TS: wallets, accounts, transactions, money, reducer, selectors
+  main.tsx   # mounts <WalletStoreProvider> around <RouterProvider>
+openspec/    # spec-driven change workflow (proposals, specs, tasks)
 ```
 
 ## Domain module (`src/domain/`)
@@ -48,6 +49,17 @@ The shell is purely presentational — no domain imports, no storage, no I/O. Ro
 - **`pages/NotFound.tsx`** is wired as both the root `errorElement` and a `path: "*"` catch-all, so unknown URLs render inside the shell.
 
 Spec: `openspec/specs/ui-shell/` (archived proposal at `openspec/changes/archive/*-add-ui-shell/`).
+
+## Wallet feature (`src/features/wallet/`)
+
+The feature module is the only code that imports both the shell and the domain. The shell stays domain-free; the domain stays React-free.
+
+- **`store.tsx`** exposes `WalletStoreProvider` (wraps `useReducer(walletReducer, null)` in a React context) and `useWalletStore()` (returns `{ state, dispatch }`, throws when used outside the provider). Mounted once in `main.tsx` so every route shares the same store.
+- **`WalletView.tsx`** renders the empty state or the populated list. Balances come from `balanceOfAccount`; totals from `walletTotals`; no balance math is reimplemented in the UI.
+- **`formatMoney.ts`** formats `Money` (bigint minor units) via `Intl.NumberFormat` without converting the full amount to `number`, so precision is preserved for large values. Unknown currencies fall back to exponent `2` and warn once.
+- **`seedDemoWallet.ts`** builds a deterministic action sequence for the demo button; ids come from `newId<T>()` and timestamps from `new Date().toISOString()` at click time.
+
+Spec: `openspec/specs/wallet-list-view/` (archived proposal at `openspec/changes/archive/*-wallet-list-view/`).
 
 ## Tooling notes
 
