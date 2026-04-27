@@ -1,73 +1,49 @@
-# React + TypeScript + Vite
+# ZenWallet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small, in-progress personal-finance app. Built with React 19, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Status
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Early. The UI is still the Vite starter — there is no wallet UI yet. What does exist is a pure-TypeScript domain layer under `src/domain/` that later features will build on.
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `npm run dev` — start the Vite dev server with HMR
+- `npm run build` — type-check (`tsc -b`) and produce a production bundle in `dist/`
+- `npm run lint` — ESLint (flat config)
+- `npm run preview` — serve the built `dist/` locally
 
-## Expanding the ESLint configuration
+No test runner is wired up yet.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Project layout
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+  domain/   # pure TS: wallets, accounts, transactions, money, reducer, selectors
+  App.tsx   # still the Vite starter; will be replaced
+  main.tsx
+openspec/   # spec-driven change workflow (proposals, specs, tasks)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Domain module (`src/domain/`)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The domain layer is React-free, dependency-free, and side-effect-free. It owns the types and the invariants that every later feature will speak in terms of.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **Money** as `{ amount: bigint; currency: Currency }` in minor units — no floats.
+- **IDs** are branded string types (`WalletId`, `AccountId`, `TransactionId`); callers generate them via `newId<T>()`.
+- **Reducer** `walletReducer(state, action)` is pure and deterministic. Actions: `wallet/create`, `account/add`, `account/rename`, `account/archive`, `transaction/post`, `transaction/void`.
+- **Transactions are append-only.** "Delete" is modelled as `voided: true`; voided rows are excluded from balances but retained in state.
+- **Balances are derived,** not stored. Selectors: `balanceOfAccount`, `transactionsForAccount`, `walletTotals`.
+- **Errors** are typed. Invariant violations throw `DomainError` with a stable `code` (`UNKNOWN_ACCOUNT`, `CURRENCY_MISMATCH`, `ACCOUNT_ARCHIVED`, …).
+
+The rationale lives in `openspec/changes/` (see the `add-wallet-domain-model` proposal/design/specs).
+
+## Tooling notes
+
+- **TypeScript project references:** `tsconfig.json` composes `tsconfig.app.json` (source) and `tsconfig.node.json` (tooling). Build with `tsc -b`.
+- **Strict-ish TS config:** `verbatimModuleSyntax`, `erasableSyntaxOnly`, `noUnusedLocals`, `noUnusedParameters`. Type-aware ESLint rules are not enabled.
+- **React Compiler is disabled** for now, to keep dev/build time down.
+
+## Workflow
+
+This repo uses [OpenSpec](https://github.com/openspec-ai/openspec)-style spec-driven changes. Proposals, specs, and tasks live under `openspec/`. Use the `opsx:propose` / `opsx:apply` / `opsx:archive` skills to drive the workflow instead of editing `openspec/` by hand.
