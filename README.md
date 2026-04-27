@@ -4,7 +4,7 @@ A small, in-progress personal-finance app. Built with React 19, TypeScript, and 
 
 ## Status
 
-Early. The UI is still the Vite starter — there is no wallet UI yet. What does exist is a pure-TypeScript domain layer under `src/domain/` that later features will build on.
+Early. The app now boots into a real UI shell (layout, navigation, routing) with a landing page at `/` and a "Coming soon" stub at `/app`. No feature pages yet. The pure-TypeScript domain layer under `src/domain/` is in place for those features to build on.
 
 ## Scripts
 
@@ -19,9 +19,10 @@ No test runner is wired up yet.
 
 ```
 src/
+  app/      # UI shell: router, Layout, Navigation (presentational, domain-free)
+  pages/    # route components: Landing, NotFound
   domain/   # pure TS: wallets, accounts, transactions, money, reducer, selectors
-  App.tsx   # still the Vite starter; will be replaced
-  main.tsx
+  main.tsx  # mounts <RouterProvider>
 openspec/   # spec-driven change workflow (proposals, specs, tasks)
 ```
 
@@ -36,7 +37,17 @@ The domain layer is React-free, dependency-free, and side-effect-free. It owns t
 - **Balances are derived,** not stored. Selectors: `balanceOfAccount`, `transactionsForAccount`, `walletTotals`.
 - **Errors** are typed. Invariant violations throw `DomainError` with a stable `code` (`UNKNOWN_ACCOUNT`, `CURRENCY_MISMATCH`, `ACCOUNT_ARCHIVED`, …).
 
-The rationale lives in `openspec/changes/` (see the `add-wallet-domain-model` proposal/design/specs).
+The rationale lives in `openspec/specs/wallet-domain/` (archived proposal at `openspec/changes/archive/*-add-wallet-domain-model/`).
+
+## UI shell (`src/app/`, `src/pages/`)
+
+The shell is purely presentational — no domain imports, no storage, no I/O. Routing uses React Router v7's data router (`createBrowserRouter` + `RouterProvider`).
+
+- **`app/router.tsx`** is the single source of truth for top-level destinations. It exports both the `router` and a typed `navDestinations` array; `Navigation` maps over the same array so adding a route and adding a nav entry is one edit.
+- **`app/Layout.tsx`** renders semantic `<header><nav/></header><main><Outlet/></main><footer/>`.
+- **`pages/NotFound.tsx`** is wired as both the root `errorElement` and a `path: "*"` catch-all, so unknown URLs render inside the shell.
+
+Spec: `openspec/specs/ui-shell/` (archived proposal at `openspec/changes/archive/*-add-ui-shell/`).
 
 ## Tooling notes
 

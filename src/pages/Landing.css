@@ -1,0 +1,14 @@
+.landing {
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.landing h1 {
+  margin-bottom: 16px;
+}
+
+.landing p {
+  margin-bottom: 12px;
+}
