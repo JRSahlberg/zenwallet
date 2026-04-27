@@ -1,3 +1,9 @@
+## Purpose
+
+Provide a dashboard view of the wallet's current state, including account list with balances, total net worth, and month-to-date transaction summary. Bridge the feature layer with the domain layer while keeping the presentation layer domain-free.
+
+## Requirements
+
 ### Requirement: A feature-layer store provider hosts the wallet reducer
 
 The system SHALL provide a `WalletStoreProvider` React component exported from `src/features/wallet/store.tsx` that internally calls `useReducer(walletReducer, null)` and exposes `{ state, dispatch }` via a typed React context. The system SHALL provide a `useWalletStore()` hook from the same module that returns `{ state, dispatch }` and throws an `Error` with a stable message when called outside the provider. The system SHALL mount exactly one `WalletStoreProvider` in `src/main.tsx` wrapping the `RouterProvider` so that every route sees the same store.

@@ -1,5 +1,8 @@
-## ADDED Requirements
+# accounts-view Specification
 
+## Purpose
+TBD - created by archiving change expand-wallet-ui. Update Purpose after archive.
+## Requirements
 ### Requirement: The `/accounts` route renders the accounts list
 
 The system SHALL register a nested `/accounts` route in `src/app/router.tsx` whose parent element is `<AccountsPage />` (from `src/pages/Accounts.tsx`) containing an `<Outlet />`, with an index child rendering `<AccountsList />` (from `src/features/wallet/AccountsList.tsx`) and a `:accountId` child rendering `<AccountDetail />` (from `src/features/wallet/AccountDetail.tsx`). The `navDestinations` array SHALL include `{ to: '/accounts', label: 'Accounts' }`.
@@ -71,3 +74,4 @@ The system SHALL render, when the `:accountId` param does not match any account 
 #### Scenario: State is null
 - **WHEN** the store `state` is `null` and a user navigates to `/accounts/anything`
 - **THEN** the view renders the account not-found block (the demo seed lives on `/wallet`; detail pages do not seed)
+

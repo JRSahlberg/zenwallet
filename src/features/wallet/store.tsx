@@ -1,7 +1,8 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import type { Dispatch, ReactNode } from "react";
 import { walletReducer } from "../../domain";
 import type { Action, DomainState } from "../../domain";
+import { loadWalletState, saveWalletState } from "./persistence";
 
 type WalletStore = {
   state: DomainState;
@@ -15,7 +16,12 @@ const WalletStoreContext = createContext<WalletStore | typeof SENTINEL>(
 );
 
 export function WalletStoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(walletReducer, null);
+  const [state, dispatch] = useReducer(walletReducer, null, loadWalletState);
+
+  useEffect(() => {
+    saveWalletState(state);
+  }, [state]);
+
   return (
     <WalletStoreContext.Provider value={{ state, dispatch }}>
       {children}

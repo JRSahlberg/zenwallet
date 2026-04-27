@@ -6,7 +6,9 @@ export type DomainErrorCode =
   | "CURRENCY_MISMATCH"
   | "ACCOUNT_ARCHIVED"
   | "UNKNOWN_TRANSACTION"
-  | "ALREADY_VOIDED";
+  | "ALREADY_VOIDED"
+  | "MISSING_PAYEE"
+  | "MISSING_CATEGORY";
 
 export class DomainError extends Error {
   readonly code: DomainErrorCode;

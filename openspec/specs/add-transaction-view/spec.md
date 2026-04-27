@@ -1,5 +1,8 @@
-## ADDED Requirements
+# add-transaction-view Specification
 
+## Purpose
+TBD - created by archiving change expand-wallet-ui. Update Purpose after archive.
+## Requirements
 ### Requirement: The `/add` route renders the add-transaction form
 
 The system SHALL register a `/add` route in `src/app/router.tsx` whose `element` is `<AddPage />` (from `src/pages/Add.tsx`) that renders a `<AddTransactionForm />` from `src/features/wallet/AddTransactionForm.tsx`. The route SHALL render inside the existing `Layout`, and `navDestinations` SHALL include `{ to: '/add', label: 'Add' }`.
@@ -79,3 +82,4 @@ The system SHALL construct action payloads using `newId` from `src/domain/ids`, 
 #### Scenario: Dispatch uses the feature-layer store hook
 - **WHEN** a reviewer inspects `AddTransactionForm.tsx`
 - **THEN** the dispatch call comes from `useWalletStore()` and the module does not import `walletReducer` directly
+

@@ -19,6 +19,9 @@ export type { Action } from "./reducer";
 
 export {
   balanceOfAccount,
+  monthlyTotals,
+  topSpendingCategory,
   transactionsForAccount,
   walletTotals,
 } from "./selectors";
+export type { MonthlyTotalEntry } from "./selectors";

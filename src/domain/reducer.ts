@@ -22,6 +22,8 @@ export type Action =
       transactionId: TransactionId;
       amount: Money;
       occurredAt: string;
+      payee: string;
+      category: string;
       memo?: string;
     }
   | { type: "transaction/void"; transactionId: TransactionId };
@@ -139,11 +141,19 @@ function postTransaction(
   if (wallet.transactions.some((t) => t.id === action.transactionId)) {
     throw new DomainError("DUPLICATE_ID", `transaction ${action.transactionId}`);
   }
+  if (action.payee.trim() === "") {
+    throw new DomainError("MISSING_PAYEE");
+  }
+  if (action.category.trim() === "") {
+    throw new DomainError("MISSING_CATEGORY");
+  }
   const tx: Transaction = {
     id: action.transactionId,
     accountId: action.accountId,
     amount: action.amount,
     occurredAt: action.occurredAt,
+    payee: action.payee,
+    category: action.category,
     memo: action.memo,
     voided: false,
   };

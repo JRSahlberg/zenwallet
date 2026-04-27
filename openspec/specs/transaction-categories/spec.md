@@ -1,5 +1,8 @@
-## ADDED Requirements
+# transaction-categories Specification
 
+## Purpose
+TBD - created by archiving change expand-wallet-ui. Update Purpose after archive.
+## Requirements
 ### Requirement: A static category catalog is exposed from the feature layer
 
 The system SHALL export two readonly tuples from `src/features/wallet/categories.ts`:
@@ -32,3 +35,4 @@ The system SHALL implement `categories.ts` with only `as const` tuple literals a
 #### Scenario: No side effects at import time
 - **WHEN** a consumer does `import { INCOME_CATEGORIES } from "./features/wallet/categories"` and does nothing else
 - **THEN** no `console`, `window`, `document`, or storage calls occur during module evaluation
+

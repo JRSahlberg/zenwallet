@@ -1,3 +1,9 @@
+## Purpose
+
+Provide a consistent, semantic HTML shell with React Router v7 integration. The shell is presentational and domain-free, acting as the container for all application routes while maintaining proper landmark structure and navigation consistency.
+
+## Requirements
+
 ### Requirement: App mounts a layout-wrapped router at the root
 
 The system SHALL mount a single `RouterProvider` from `src/main.tsx` that renders a root `Layout` component wrapping a router outlet. The `Layout` SHALL render semantic `<header>`, `<nav>` (inside the header), `<main>`, and `<footer>` landmarks, with the outlet rendered inside `<main>`. The system SHALL NOT render the Vite starter `App` component anywhere.

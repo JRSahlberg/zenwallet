@@ -1,3 +1,9 @@
+## Purpose
+
+Model the core wallet and transaction domain with invariant protection, append-only transactions, and derived balance calculations. Keep the domain pure, React-free, and dependency-free.
+
+## Requirements
+
 ### Requirement: Money is represented exactly in minor units
 
 The system SHALL represent all monetary amounts as a pair `{ amount: bigint, currency: Currency }` where `amount` is the value in the currency's minor unit (e.g. cents, pence, öre) and `currency` is an ISO-4217 three-letter code. The system SHALL NOT use `number` for monetary amounts anywhere in the domain module.

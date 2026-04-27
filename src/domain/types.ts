@@ -15,6 +15,8 @@ export type Transaction = {
   accountId: AccountId;
   amount: Money;
   occurredAt: string;
+  payee: string;
+  category: string;
   memo?: string;
   voided: boolean;
 };

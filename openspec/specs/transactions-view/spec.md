@@ -1,5 +1,8 @@
-## ADDED Requirements
+# transactions-view Specification
 
+## Purpose
+TBD - created by archiving change expand-wallet-ui. Update Purpose after archive.
+## Requirements
 ### Requirement: The `/transactions` route renders the transactions view
 
 The system SHALL register a `/transactions` route in `src/app/router.tsx` whose `element` is a `<TransactionsPage />` (from `src/pages/Transactions.tsx`) that renders a `<TransactionsView />` from `src/features/wallet/TransactionsView.tsx`. The route SHALL render inside the existing `Layout`, and its link SHALL appear in `navDestinations` as `{ to: '/transactions', label: 'Transactions' }`.
@@ -83,3 +86,4 @@ The system SHALL render an empty-state block containing an accessible message (e
 #### Scenario: Empty state when state is null
 - **WHEN** the store `state` is `null`
 - **THEN** the view renders the "no transactions" empty state (or redirects to `/wallet` for the demo seed — implementation choice) and no row elements are rendered
+

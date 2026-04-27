@@ -1,0 +1,98 @@
+.transactions-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.transactions-view__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.transactions-view__filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  flex: 1 1 160px;
+}
+
+.transactions-view__filters select,
+.transactions-view__filters input {
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.transactions-view__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.transactions-view__row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr auto auto;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed rgba(127, 127, 127, 0.25);
+}
+
+.transactions-view__row:last-child {
+  border-bottom: none;
+}
+
+.transactions-view__payee {
+  color: var(--text-h);
+  font-weight: 500;
+}
+
+.transactions-view__category {
+  font-variant: small-caps;
+  opacity: 0.85;
+}
+
+.transactions-view__account {
+  opacity: 0.75;
+}
+
+.transactions-view__date,
+.transactions-view__amount {
+  font-variant-numeric: tabular-nums;
+}
+
+.transactions-view__amount {
+  text-align: right;
+}
+
+.transactions-view__empty {
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .transactions-view__row {
+    grid-template-columns: 1fr auto;
+    row-gap: 0.15rem;
+  }
+
+  .transactions-view__category,
+  .transactions-view__account,
+  .transactions-view__date {
+    grid-column: 1;
+  }
+
+  .transactions-view__amount {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
