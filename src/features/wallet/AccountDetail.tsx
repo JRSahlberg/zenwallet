@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import type { AccountId } from "../../domain";
 import { balanceOfAccount } from "../../domain";
+import { amountSignClass } from "./amountSign";
 import { formatMoney } from "./formatMoney";
 import { useWalletStore } from "./store";
 import "./AccountsView.css";
@@ -52,18 +53,24 @@ export function AccountDetail() {
         </p>
       ) : (
         <ul className="account-detail__list">
-          {rows.map((tx) => (
-            <li key={tx.id} className="account-detail__row">
-              <span className="account-detail__payee">{tx.payee}</span>
-              <span className="account-detail__category">{tx.category}</span>
-              <span className="account-detail__date">
-                {formatDate(tx.occurredAt)}
-              </span>
-              <span className="account-detail__amount">
-                {formatMoney(tx.amount)}
-              </span>
-            </li>
-          ))}
+          {rows.map((tx) => {
+            const date = formatDate(tx.occurredAt);
+            const signClass = amountSignClass(tx.amount.amount);
+            const amountClass = signClass
+              ? `account-detail__amount ${signClass}`
+              : "account-detail__amount";
+            return (
+              <li key={tx.id} className="account-detail__row">
+                <span className="account-detail__payee">{tx.payee}</span>
+                <span className="account-detail__category">{tx.category}</span>
+                <span className="account-detail__date">{date}</span>
+                <span className={amountClass}>{formatMoney(tx.amount)}</span>
+                <span className="account-detail__meta">
+                  {tx.category} · {date}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
       <Link to="/accounts" className="account-detail__back">

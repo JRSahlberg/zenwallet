@@ -1,55 +1,58 @@
 .accounts-header {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   text-align: left;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .accounts-header__networth {
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  min-width: 0;
 }
 
 .accounts-header__label {
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 0.8rem;
-  color: var(--text);
+  font-size: var(--font-size-eyebrow);
+  color: var(--text-muted);
 }
 
 .accounts-header__list {
   display: flex;
-  gap: 1.25rem;
+  gap: var(--space-5);
   flex-wrap: wrap;
   list-style: none;
   padding: 0;
   margin: 0;
+  min-width: 0;
 }
 
 .accounts-header__list li {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
   align-items: baseline;
 }
 
 .accounts-header__currency {
   font-variant: small-caps;
-  opacity: 0.7;
+  color: var(--text-muted);
 }
 
 .accounts-header__amount {
   font-variant-numeric: tabular-nums;
-  color: var(--text-h);
+  color: var(--text-strong);
 }
 
 .accounts-header__empty {
-  color: var(--text);
+  color: var(--text-muted);
 }
 
 .accounts-view__list {
@@ -57,14 +60,15 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-3);
 }
 
 .accounts-view__card {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   transition: border-color 0.15s;
+  background: var(--surface);
 }
 
 .accounts-view__card:hover {
@@ -74,51 +78,58 @@
 .accounts-view__link {
   display: grid;
   grid-template-columns: 1fr auto auto;
-  gap: 0.5rem;
+  gap: var(--space-2);
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: var(--space-3) var(--space-4);
   text-decoration: none;
   color: inherit;
+  min-height: 44px;
+}
+
+.accounts-view__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
 }
 
 .accounts-view__name {
-  color: var(--text-h);
+  color: var(--text-strong);
   font-weight: 500;
 }
 
 .accounts-view__currency {
   font-variant: small-caps;
-  opacity: 0.7;
+  color: var(--text-muted);
 }
 
 .accounts-view__balance {
   font-variant-numeric: tabular-nums;
-  color: var(--text-h);
+  color: var(--text-strong);
 }
 
 .accounts-view__empty {
-  padding: 1rem;
+  padding: var(--space-4);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .account-detail {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-3);
   text-align: left;
 }
 
 .account-detail__header {
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .account-detail__balance {
   font-variant-numeric: tabular-nums;
-  color: var(--text-h);
-  font-size: 1.15rem;
+  color: var(--text-strong);
+  font-size: var(--font-size-title);
 }
 
 .account-detail__list {
@@ -132,9 +143,10 @@
 .account-detail__row {
   display: grid;
   grid-template-columns: 1.5fr 1fr auto auto;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px dashed rgba(127, 127, 127, 0.25);
+  grid-template-areas: "payee category date amount";
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px dashed var(--border);
 }
 
 .account-detail__row:last-child {
@@ -142,42 +154,72 @@
 }
 
 .account-detail__payee {
-  color: var(--text-h);
+  grid-area: payee;
+  color: var(--text-strong);
   font-weight: 500;
 }
 
 .account-detail__category {
+  grid-area: category;
   font-variant: small-caps;
-  opacity: 0.85;
+  color: var(--text-muted);
 }
 
-.account-detail__date,
-.account-detail__amount {
+.account-detail__date {
+  grid-area: date;
   font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
 }
 
 .account-detail__amount {
+  grid-area: amount;
+  font-variant-numeric: tabular-nums;
   text-align: right;
 }
 
+.account-detail__meta {
+  display: none;
+}
+
 .account-detail__back {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   align-self: flex-start;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 720px) {
+  .accounts-view__list {
+    grid-template-columns: 1fr;
+  }
+
+  .accounts-header__networth {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .accounts-header__list {
+    gap: var(--space-3);
+    width: 100%;
+  }
+
   .account-detail__row {
     grid-template-columns: 1fr auto;
-    row-gap: 0.1rem;
+    grid-template-areas:
+      "payee amount"
+      "meta  meta";
+    row-gap: var(--space-1);
   }
 
   .account-detail__category,
   .account-detail__date {
-    grid-column: 1;
+    display: none;
   }
 
-  .account-detail__amount {
-    grid-row: 1;
-    grid-column: 2;
+  .account-detail__meta {
+    grid-area: meta;
+    display: block;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--font-size-eyebrow);
   }
 }

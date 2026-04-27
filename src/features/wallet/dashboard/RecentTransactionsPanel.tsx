@@ -1,8 +1,15 @@
 import { Link } from "react-router-dom";
 import type { Wallet } from "../../../domain";
+import { amountSignClass } from "../amountSign";
 import { formatMoney } from "../formatMoney";
 
 const MAX_ROWS = 5;
+
+function formatDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString();
+}
 
 export function RecentTransactionsPanel({ wallet }: { wallet: Wallet }) {
   const accountNames = new Map(
@@ -23,20 +30,30 @@ export function RecentTransactionsPanel({ wallet }: { wallet: Wallet }) {
         <p className="dashboard-card__empty">No transactions yet.</p>
       ) : (
         <ul className="dashboard-card__recent">
-          {rows.map((tx) => (
-            <li key={tx.id} className="dashboard-card__recent-row">
-              <span className="dashboard-card__recent-payee">{tx.payee}</span>
-              <span className="dashboard-card__recent-category">
-                {tx.category}
-              </span>
-              <span className="dashboard-card__recent-account">
-                {accountNames.get(tx.accountId) ?? tx.accountId}
-              </span>
-              <span className="dashboard-card__recent-amount">
-                {formatMoney(tx.amount)}
-              </span>
-            </li>
-          ))}
+          {rows.map((tx) => {
+            const accountName = accountNames.get(tx.accountId) ?? tx.accountId;
+            const date = formatDate(tx.occurredAt);
+            const signClass = amountSignClass(tx.amount.amount);
+            const amountClass = signClass
+              ? `dashboard-card__recent-amount ${signClass}`
+              : "dashboard-card__recent-amount";
+            return (
+              <li key={tx.id} className="dashboard-card__recent-row">
+                <span className="dashboard-card__recent-payee">{tx.payee}</span>
+                <span className="dashboard-card__recent-category">
+                  {tx.category}
+                </span>
+                <span className="dashboard-card__recent-account">
+                  {accountName}
+                </span>
+                <span className="dashboard-card__recent-date">{date}</span>
+                <span className={amountClass}>{formatMoney(tx.amount)}</span>
+                <span className="dashboard-card__recent-meta">
+                  {tx.category} · {accountName} · {date}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

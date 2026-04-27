@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { AccountId, Transaction, Wallet } from "../../domain";
+import { amountSignClass } from "./amountSign";
 import { formatMoney } from "./formatMoney";
 import { useWalletStore } from "./store";
 import "./TransactionsView.css";
@@ -134,21 +135,28 @@ export function TransactionsView() {
         </p>
       ) : (
         <ul className="transactions-view__list">
-          {rows.map((tx) => (
-            <li key={tx.id} className="transactions-view__row">
-              <span className="transactions-view__payee">{tx.payee}</span>
-              <span className="transactions-view__category">{tx.category}</span>
-              <span className="transactions-view__account">
-                {accountNames.get(tx.accountId) ?? tx.accountId}
-              </span>
-              <span className="transactions-view__date">
-                {formatDate(tx.occurredAt)}
-              </span>
-              <span className="transactions-view__amount">
-                {formatMoney(tx.amount)}
-              </span>
-            </li>
-          ))}
+          {rows.map((tx) => {
+            const accountName = accountNames.get(tx.accountId) ?? tx.accountId;
+            const date = formatDate(tx.occurredAt);
+            const signClass = amountSignClass(tx.amount.amount);
+            const amountClass = signClass
+              ? `transactions-view__amount ${signClass}`
+              : "transactions-view__amount";
+            return (
+              <li key={tx.id} className="transactions-view__row">
+                <span className="transactions-view__payee">{tx.payee}</span>
+                <span className="transactions-view__category">{tx.category}</span>
+                <span className="transactions-view__account">
+                  {accountName}
+                </span>
+                <span className="transactions-view__date">{date}</span>
+                <span className={amountClass}>{formatMoney(tx.amount)}</span>
+                <span className="transactions-view__meta">
+                  {tx.category} · {accountName} · {date}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

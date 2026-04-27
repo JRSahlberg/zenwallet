@@ -1,14 +1,28 @@
 .landing {
   text-align: center;
-  padding: 48px 24px;
+  padding: var(--space-6) var(--space-5);
   max-width: 720px;
   margin: 0 auto;
 }
 
 .landing h1 {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 
 .landing p {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
+}
+
+.landing a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  color: var(--accent);
+  border-radius: var(--radius-md);
+}
+
+.landing a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -22,10 +22,10 @@ export function MonthTotalsCard({
           {entries.map((entry) => (
             <li key={entry.currency} className="dashboard-card__month-row">
               <span className="dashboard-card__label">{entry.currency}</span>
-              <span className="dashboard-card__month-income">
+              <span className="dashboard-card__month-income amount--positive">
                 +{formatMoney({ amount: entry.income, currency: entry.currency })}
               </span>
-              <span className="dashboard-card__month-expense">
+              <span className="dashboard-card__month-expense amount--negative">
                 −{formatMoney({ amount: entry.expense, currency: entry.currency })}
               </span>
             </li>
